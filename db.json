@@ -1,0 +1,11 @@
+{
+  "book": [
+    { "id": 1, "book_title": "json-server", "author_name": "typicode","category":"fantasy", "isbn": 2008955455},
+    { "id": 2, "book_title": "json-server2", "author_name": "revers","category":"horror", "isbn": 20082335488},
+    { "id": 3, "book_title": "json-server3", "author_name": "Mark","category":"fantasy", "isbn": 2008955499},
+    { "id": 4, "book_title": "json-server4", "author_name": "anderson","category":"horror", "isbn": 2008955400}
+  ],
+  "comments": [
+    { "id": 1, "body": "some comment", "postId": 1 }
+  ]
+}
