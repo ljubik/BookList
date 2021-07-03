@@ -5,9 +5,9 @@ import Footer from "./components/Footer/Footer";
 import db from "./db/db.json";
 import BookItem from './pages/BookItem';
 import AddBook from './pages/AddBook';
+import axios from 'axios'
 
-
-const books = db
+// const books = db
 // const books = [
 //   {
 //     id:1,
@@ -38,7 +38,7 @@ const books = db
 //     isbn: 2008955455
 //   }];
 
-localStorage.setItem('books', JSON.stringify(books));
+// localStorage.setItem('books', JSON.stringify(books));
 
 
 class App extends Component {
@@ -55,9 +55,31 @@ class App extends Component {
   componentWillMount(){
     const books  = this.getBooks();
     this.setState({books});
+    console.log('componentWillMount', books)
+
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { books } = this.state;
+    if (books !== prevState.books) {
+      localStorage.setItem("books", JSON.stringify(this.state.books));
+    }
   }
 
   getBooks(){
+    axios.defaults.baseURL = `http://localhost:4000`
+    axios
+    .get('/book')
+    .then(({ data }) => {
+      console.log('+++++++', data)
+      localStorage.setItem('books', JSON.stringify(data));
+      return this.setState(() => ({ book: [...data] }));
+     
+       })
+    .catch((error) => {
+      console.log('---------', error)
+    })
+    
     return this.state.books;
   }
 
@@ -76,6 +98,7 @@ class App extends Component {
         id, book_title, author_name, category, isbn 
       });
       this.setState({books});
+      
   }
 
   onEditSubmit(id, book_title, author_name, category, isbn ){
@@ -103,7 +126,9 @@ class App extends Component {
         <AddBook onAdd={this.onAdd}/>
         <div> <span> Title book </span> | <span> Author name </span> | <span> ISBN </span>  | <span> Category </span> | <span>Action </span> </div>
         <ul>
+        {console.log('render', this.state.books)}
           {  
+            
             this.state.books.map(book => {
               return (                        
                 <li><BookItem key={book.id} {...book} onDelete={this.onDelete} onEditSubmit={this.onEditSubmit}/></li>
