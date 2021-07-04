@@ -1,47 +1,19 @@
 import "./App.css";
-import React, { Component} from 'react';
+import React, { Component, lazy, Suspense } from 'react';
+import { Route } from 'react-router';
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
-import db from "./db/db.json";
+// import db from "./db/db.json";
 import BookItem from './pages/BookItem';
 import AddBook from './pages/AddBook';
+
 import axios from 'axios';
 import { Button, Table} from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-
-
-// const books = db
-// const books = [
-//   {
-//     id:1,
-//     book_title: "Do Androids Dream",
-//     author_name: "Philip K. Dick",
-//     category:"fantasy",
-//     isbn: 1231231232
-//   },
-//   {
-//     id: 2,
-//     book_title: "Electric Sheep? ",
-//     author_name: "Philip revers",
-//     category:"fantasy",
-//     isbn: 2012313432
-//   },
-//   {
-//     id: 3,
-//     book_title: "Dream of Electric Sheep? ",
-//     author_name: "Karl Fick",
-//     category:"fantasy",
-//     isbn: 2088823332
-//   },
-//   {
-//     id: 4,
-//     book_title: " Do Androids Dream of Electric Sheep? ",
-//     author_name: "Philip K. Dick",
-//     category:"horror",
-//     isbn: 2008955455
-//   }];
-
+// const BookItem = lazy(() => import('./pages/BookItem'));
+// const AddBook = lazy(() => import('./pages/AddBook'));
+// const About = lazy(() => import('./pages/About'));
 // localStorage.setItem('books', JSON.stringify(books));
 
 
@@ -127,6 +99,27 @@ class App extends Component {
       <Header/>
       <div className = "App" >
         
+      {/* <Suspense fallback={"Waiting..."}>
+          <Route exact path="/" render={props => 
+            <About 
+              {...props} 
+              onChangePath={this.onChangePath}
+            />}
+          />
+          <Route exact path="/booklist" render={props => 
+            <BookItem 
+              {...props} 
+              onChangePath={this.onChangePath}
+            />}
+          />
+          <Route exact path="/AddBook" render={props => 
+            <AddBook 
+              {...props} 
+              onChangePath={this.onChangePath}
+            />}
+          />
+      </Suspense> */}
+
         <AddBook onAdd={this.onAdd}/>
         <Table striped bordered hover books={this.state.books}>
             <thead>
@@ -168,6 +161,7 @@ class App extends Component {
           </Table>
         </div>
       <Footer/>
+      
     </>
     );
   }
