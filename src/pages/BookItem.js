@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 class BookItem extends Component {
   constructor(props){
@@ -38,23 +39,23 @@ class BookItem extends Component {
           {
               this.state.isEdit ? (
                 <div>
-                  <form onSubmit={this.onEditSave}>
+                  <Form onSubmit={this.onEditSave}>
                     <div>
-                      <span> Edit book </span>
-                      <br />
+                      <span> <h3>Edit book </h3></span>
+                      <br /><span>Book Name</span>
                       <input placeholder="Book Name" ref={bookNameInput => this.bookNameInput = bookNameInput} defaultValue={book_title}/>
-                      {`  `}
+                      <br /><span>Book author</span>
                       <input placeholder="Book author" ref={bookAuthorInput=>this.bookAuthorInput = bookAuthorInput} defaultValue={author_name}/>
-                      {`  `}
+                      <br /><span>Book isbn</span>
                       <input placeholder="Book isbn" ref={bookIsbnInput=>this.bookIsbnInput = bookIsbnInput} defaultValue={isbn}/>
-                      {`  `}
-                      <br />
+                      <br /><span>Book category</span>
                       <input placeholder="Book category" ref={bookCategoryInput=>this.bookCategoryInput = bookCategoryInput} defaultValue={category}/>
                       {`  `}
+                      <br />
                       <Button variant="primary" size="sm" onClick={this.onEditSave}> Save</Button>
                       <hr/>
                     </div>
-                  </form>
+                  </Form>
                 </div>
               ) : (
                 <div>                

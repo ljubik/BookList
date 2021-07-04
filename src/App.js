@@ -1,136 +1,176 @@
-import React, { useState, useEffect} from 'react';
+import "./App.css";
+import React, { Component} from 'react';
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
+import db from "./db/db.json";
 import BookItem from './pages/BookItem';
 import AddBook from './pages/AddBook';
 import axios from 'axios';
-import Table from 'react-bootstrap/Table';
+import { Button, Table} from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 
-function App(props){
-  // const [books, setBooks] = useState([])
 
-  let [books, setBooks] = useState([
-    { "id": 1, "book_title": "json-server", "author_name": "typicode","category":"fantasy", "isbn": 2008955455},
-    { "id": 2, "book_title": "json-server2", "author_name": "revers","category":"horror", "isbn": 20082335488},
-    { "id": 3, "book_title": "json-server3", "author_name": "Mark","category":"fantasy", "isbn": 2008955499},
-    { "id": 4, "book_title": "json-server4", "author_name": "anderson","category":"horror", "isbn": 2008955400}
-  ]);
+// const books = db
+// const books = [
+//   {
+//     id:1,
+//     book_title: "Do Androids Dream",
+//     author_name: "Philip K. Dick",
+//     category:"fantasy",
+//     isbn: 1231231232
+//   },
+//   {
+//     id: 2,
+//     book_title: "Electric Sheep? ",
+//     author_name: "Philip revers",
+//     category:"fantasy",
+//     isbn: 2012313432
+//   },
+//   {
+//     id: 3,
+//     book_title: "Dream of Electric Sheep? ",
+//     author_name: "Karl Fick",
+//     category:"fantasy",
+//     isbn: 2088823332
+//   },
+//   {
+//     id: 4,
+//     book_title: " Do Androids Dream of Electric Sheep? ",
+//     author_name: "Philip K. Dick",
+//     category:"horror",
+//     isbn: 2008955455
+//   }];
 
-    useEffect(() => {
-      // const books  = getBooks();
-      // const books  = [{id:1,name:"test",autor:"22autor",isbn:222},{id:2,name:"test",autor:"22autor",isbn:222},{id:3,name:"test3",autor:"22a33utor",isbn:23322}];
-      // setBooks({books});
-      // console.log('componentWillMount', books)
-    });
+// localStorage.setItem('books', JSON.stringify(books));
 
-    function getBooks(){
-        axios.defaults.baseURL = `http://localhost:4000`
-        axios
-        .get('/books')
-        .then(({ data }) => {
-          console.log('+++++++', data)
-          localStorage.setItem('books', JSON.stringify(data));
-          // return setBooks(() => ({ books: [...data] }));
-          return setBooks (books);
-           })
-        .catch((error) => {
-          console.log('---------', error)
-        })
 
-        // return books;
-      }
+class App extends Component {
 
-      function onDelete(id){
-          // const books = getBooks();
-          console.log("delete", books)
-          const filteredBooks = books.filter(book => {
-            return book.id !== id;
-          });
-          // setBooks({books:filteredBooks});  
-          // () => setBooks(books => {filteredBooks}) 
-           setBooks(()=>({books:filteredBooks})) 
-           console.log("delete filteredBooks", filteredBooks)
-      }
 
-      function onAdd(book_title, author_name, category, isbn){  
-        console.log("onADD", books)     
-              // const books = getBooks();
-              let id = books.length + 1; /* get last insert id  */
-              books.push({
-                id, book_title, author_name, category, isbn 
-              });
-              setBooks({books:books});
-              
-      }
-        
-  function onEditSubmit(id, book_title, author_name, category, isbn ){
-    console.log("onEdit", books)
-          // let books = getBooks();
-          books = books.map(book => {
-            if(book.id === id){
-              book.id = id;
-              book.book_title = book_title;
-              book.author_name = author_name;
-              book.category = category;
-              book.isbn = isbn;
-            }
-            return book;
-          });
-          setBooks({ books:books });
-     
+  constructor(props){
+    super (props);
+    this.state = { books: JSON.parse(localStorage.getItem('books')) , term:'' };
+    this.onDelete = this.onDelete.bind(this);
+    this.onAdd = this.onAdd.bind(this);
+    this.onEditSubmit = this.onEditSubmit.bind(this);
+  }
+
+  componentWillMount(){
+    const books  = this.getBooks();
+    this.setState({books});
+    console.log('componentWillMount', books)
+
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    const { books } = this.state;
+    if (books !== prevState.books) {
+      localStorage.setItem("books", JSON.stringify(this.state.books));
     }
+  }
 
-  return (
-  <>
-    <Header/>
-    <div className = "App" >
-    <AddBook onAdd={onAdd}/>
-    <Table books={books}>
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Title book</th>
-          <th>Author name</th>
-          <th>ISBN</th>
-          <th>Category</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
+  getBooks(){
+    axios.defaults.baseURL = `http://localhost:4000`
+    axios
+    .get('/books')
+    .then(({ data }) => {
+      console.log('+++++++', data)
+      localStorage.setItem('books', JSON.stringify(data));
+      return this.setState(() => ({ book: [...data] }));
+     
+       })
+    .catch((error) => {
+      console.log('---------', error)
+    })
+    
+    return this.state.books;
+  }
 
-        {books.map((post) => 
-        <tr key={post.id}>
-        <td>
-          {post.id}
-        </td>
-        <td>
-          {post.book_title}
-        </td>
-        <td>
-          {post.author_name}
-        </td>
-        <td>
-          {post.isbn}
-        </td>
-        <td>
-          {post.category}
-        </td>
-        <td>
-          <BookItem onDelete={()=>onDelete()} onEditSubmit={onEditSubmit}/>
-        </td>
-        </tr>
-        )}
+  onDelete(id){
+      const books = this.getBooks();
+      const filteredBooks = books.filter(book => {
+        return book.id !== id;
+      });
+      this.setState({books:filteredBooks});    
+  }
 
-      </tbody>
-    </Table>
+  onAdd(book_title, author_name, category, isbn ){       
+      const books = this.getBooks();
+      let id = books.length + 1; /* get last insert id  */
+      books.push({
+        id, book_title, author_name, category, isbn 
+      });
+      this.setState({books});
+      
+  }
 
-  </div>
-  <Footer/>
-  </>)
+  onEditSubmit(id, book_title, author_name, category, isbn ){
+  let books = this.getBooks();
+  books = books.map(book => {
+    if(book.id === id){
+      book.id = id;
+      book.book_title = book_title;
+      book.author_name = author_name;
+      book.category = category;
+      book.isbn = isbn;
+    }
+    return book;
+  });
+  this.setState({ books });
+  }
+
+  render() {
+
+    return (
+      <>
+      <Header/>
+      <div className = "App" >
+        
+        <AddBook onAdd={this.onAdd}/>
+        <Table striped bordered hover books={this.state.books}>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Title book</th>
+                <th>Author name</th>
+                <th>Category</th>
+                <th>ISBN</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {this.state.books.map((book) => 
+              <tr key={book.id}>
+              <td key={book.id}>
+                {book.id}
+              </td>
+              <td>
+                {book.book_title}
+              </td>
+              <td>
+                {book.author_name}
+              </td>
+              <td>
+                {book.category}
+              </td>
+              <td>
+                {book.isbn}
+              </td>
+              <td>
+                <span><BookItem key={book.id} {...book} onDelete={this.onDelete} onEditSubmit={this.onEditSubmit}/></span>
+                {/* <span><Button variant="danger" size="sm" onDelete={this.onDelete}> Delete </Button> </span>
+                <span><Button variant="warning" size="sm" onEditSubmit={this.onEditSubmit}> Edit</Button> </span> */}
+               </td>
+              </tr>
+              )}
+            </tbody>
+          </Table>
+        </div>
+      <Footer/>
+    </>
+    );
+  }
 }
-
-
 
 export default App;
