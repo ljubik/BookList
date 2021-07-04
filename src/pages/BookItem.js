@@ -57,15 +57,7 @@ class BookItem extends Component {
                   </form>
                 </div>
               ) : (
-                <div>
-                      <span> {book_title}  </span>
-                  {`|`}
-                      <span> {author_name} </span>
-                  {`|`}
-                      <span> {isbn}  </span>
-                  {`|`}
-                      <span> {category} </span>
-                  {`|`}
+                <div>                
                       <span><Button variant="danger" size="sm" onClick={this.onDelete}> Delete </Button> </span>
                       <span><Button variant="warning" size="sm" onClick={this.onEdit}> Edit</Button> </span>
                 </div>

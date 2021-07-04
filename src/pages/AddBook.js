@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, Form } from 'react-bootstrap';
+
 
 
 class AddBook extends Component {
@@ -22,7 +23,7 @@ class AddBook extends Component {
       return (
         <>
 
-            <form onSubmit={this.onSubmit}>
+            <Form onSubmit={this.onSubmit}>
             <div>            
             <span> Add a book </span>
             <br />
@@ -38,7 +39,7 @@ class AddBook extends Component {
 
             <hr/>
             </div>
-            </form>
+            </Form>
 
         </>
     );
