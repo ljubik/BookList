@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Component} from 'react';
+import React, { useState, useEffect} from 'react';
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import BookItem from './pages/BookItem';
@@ -28,12 +28,12 @@ function App(props){
     function getBooks(){
         axios.defaults.baseURL = `http://localhost:4000`
         axios
-        .get('/book')
+        .get('/books')
         .then(({ data }) => {
           console.log('+++++++', data)
           localStorage.setItem('books', JSON.stringify(data));
-          // return setBooks(() => ({ book: [...data] }));
-          return books;
+          // return setBooks(() => ({ books: [...data] }));
+          return setBooks (books);
            })
         .catch((error) => {
           console.log('---------', error)
@@ -78,7 +78,7 @@ function App(props){
             }
             return book;
           });
-          setBooks({ books });
+          setBooks({ books:books });
      
     }
 
