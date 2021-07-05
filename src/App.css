@@ -2,8 +2,32 @@
   background-color: rgb(245, 245, 245);
   color: black;
   text-align: center;
+  padding: 30px;
 }
 
 ul {
   list-style: none;
+  display: flex;
 }
+
+li {
+  display: flex;
+  padding: auto;
+  margin: auto;
+}
+
+h1{
+  text-align: center;
+}
+
+h2{
+  text-align: center;
+  color: blue;
+}
+
+/* input{
+  display: flex;
+  padding: auto;
+  margin: auto;
+} */
+
