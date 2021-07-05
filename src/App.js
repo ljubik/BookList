@@ -42,6 +42,18 @@ class App extends Component {
     }
   }
 
+  componentDidMount() {
+    // Simple POST request with a JSON body using fetch
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ category: 'React POST Request Example' })
+    };
+    fetch('https://localhost:4000/books', requestOptions)
+        .then(response => response.json())
+        .then(data => this.setState({ books: data.category }));
+}
+
   getBooks(){
     axios.defaults.baseURL = `http://localhost:4000`
     axios
@@ -93,10 +105,12 @@ class App extends Component {
   }
 
   render() {
-
+    const {books} = this.state
     return (
       <>
+      <div>{books.map(book => book.category)}</div>
       <Header/>
+      
       <div className = "App" >
         
       {/* <Suspense fallback={"Waiting..."}>
